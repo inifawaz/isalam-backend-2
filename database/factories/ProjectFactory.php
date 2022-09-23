@@ -29,7 +29,7 @@ class ProjectFactory extends Factory
         }
 
         $name = fake()->sentence(10);
-        $description = "<h2>" . fake()->sentence(10) . "</h2>" . "<p>" . fake()->sentence(200) . "</p>";
+        $description = "<h2>" . fake()->sentence(10) . "</h2>" . "<p>" . fake()->sentence(400) . "</p>";
 
         $is_target = fake()->randomElement([true, true, true, true, true, true, true, true, true,  false]);
         if ($is_target) {

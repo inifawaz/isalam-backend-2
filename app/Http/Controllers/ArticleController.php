@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ArticleDetailsResource;
+use App\Http\Resources\ArticleItemResource;
 use App\Models\Article;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,9 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //
+        return response([
+            'articles' => ArticleItemResource::collection(Article::shown()->orderBy('id', 'desc')->get())
+        ]);
     }
 
     /**
@@ -46,7 +50,9 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        //
+        return response([
+            'article' => new ArticleDetailsResource($article)
+        ]);
     }
 
     /**

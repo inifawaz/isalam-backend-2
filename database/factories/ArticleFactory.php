@@ -30,7 +30,7 @@ class ArticleFactory extends Factory
             "user_id" => fake()->randomElement(User::role('admin')->get()->pluck('id')),
             "topic_id" => fake()->randomElement(Topic::get()->pluck('id')),
             "featured_image_url" => $featured_image_url,
-            "content" => "<h2>" . fake()->sentence(7) . "</h2>" . "<p>" . fake()->sentence(100) . "</p>"
+            "content" => "<h2>" . fake()->sentence(7) . "</h2>" . "<p>" . fake()->sentence(400) . "</p>"
         ];
     }
 }

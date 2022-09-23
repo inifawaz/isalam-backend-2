@@ -41,6 +41,8 @@ return new class extends Migration
 
             $table->boolean('is_shown')->default(true);
             $table->boolean('is_ended')->default(false);
+            $table->boolean('is_favourite')->default(false);
+
 
             $table->timestamps();
         });

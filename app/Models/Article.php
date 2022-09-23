@@ -14,4 +14,9 @@ class Article extends Model
     {
         return $this->belongsTo(Topic::class);
     }
+
+    public function scopeShown($query)
+    {
+        return $query->where('is_shown', true);
+    }
 }

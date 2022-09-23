@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminArticleController;
 use App\Http\Controllers\AdminInformationController;
 use App\Http\Controllers\AdminProjectController;
 use App\Http\Controllers\AdminReportController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
@@ -34,6 +35,11 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/projects', [ProjectController::class, 'index']);
 Route::get('/projects/{project}', [ProjectController::class, 'show']);
+
+Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles/{article}', [ArticleController::class, 'show']);
+Route::get('/topics', [TopicController::class, 'index']);
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/logout', [AuthController::class, 'logout']);
@@ -87,6 +93,8 @@ Route::group(['middleware' => ['auth:sanctum', "role:admin"]], function () {
     Route::put('/admin/articles/{article}', [AdminArticleController::class, 'update']);
     Route::delete('/admin/articles/{article}', [AdminArticleController::class, 'destroy']);
     Route::post('/admin/articles', [AdminArticleController::class, 'store']);
+
+    // Article as a Public
 
     // Topic
     Route::get('/admin/topics', [TopicController::class, 'index']);

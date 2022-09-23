@@ -27,7 +27,8 @@ class ProjectItemResource extends JsonResource
             "is_ended" => $this->is_ended,
             'total_backers' => $this->paymentsSuccess->count(),
             "is_shown" => $this->is_shown,
-            "is_ended" => $this->is_ended
+            "is_ended" => $this->is_ended,
+            "is_favourite" => $this->is_favourite
         ];
         if ($this->is_target) {
             $return['target_amount'] = $this->target_amount;
