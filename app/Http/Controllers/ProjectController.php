@@ -7,6 +7,7 @@ use App\Http\Resources\BackerItemResource;
 use App\Http\Resources\ProjectDetailResource;
 use App\Http\Resources\ProjectItemResource;
 use App\Http\Resources\ReportItemResource;
+use App\Models\Category;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,7 +34,8 @@ class ProjectController extends Controller
         }
 
         return response([
-            'projects' => ProjectItemResource::collection(Project::shown()->orderBy('id', 'desc')->get())
+            'projects' => ProjectItemResource::collection(Project::shown()->orderBy('id', 'desc')->get()),
+            "categories" => Category::all()
         ]);
     }
 
@@ -153,6 +155,8 @@ class ProjectController extends Controller
         $project->start_date = $request->start_date;
         $project->end_date = $request->end_date;
         $project->is_shown = $request->is_shown;
+        $project->is_ended = $request->is_ended;
+        $project->is_favourite = $request->is_favourite;
         $project->save();
 
         return response([

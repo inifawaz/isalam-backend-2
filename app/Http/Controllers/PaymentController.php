@@ -8,6 +8,7 @@ use App\Http\Resources\PaymentItemResource;
 use App\Models\Payment;
 use App\Models\Project;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -36,6 +37,44 @@ class PaymentController extends Controller
             'maintenance_fee' => $project->maintenance_fee,
             'payment_methods' => $paymentMethods->paymentFee
         ]);
+    }
+
+    public function callback()
+    {
+        $apiKey = $this->api_key; // API key anda
+        $merchantCode = isset($_POST['merchantCode']) ? $_POST['merchantCode'] : null;
+        $amount = isset($_POST['amount']) ? $_POST['amount'] : null;
+        $merchantOrderId = isset($_POST['merchantOrderId']) ? $_POST['merchantOrderId'] : null;
+        $productDetail = isset($_POST['productDetail']) ? $_POST['productDetail'] : null;
+        $additionalParam = isset($_POST['additionalParam']) ? $_POST['additionalParam'] : null;
+        $paymentMethod = isset($_POST['paymentCode']) ? $_POST['paymentCode'] : null;
+        $resultCode = isset($_POST['resultCode']) ? $_POST['resultCode'] : null;
+        $merchantUserId = isset($_POST['merchantUserId']) ? $_POST['merchantUserId'] : null;
+        $reference = isset($_POST['reference']) ? $_POST['reference'] : null;
+        $signature = isset($_POST['signature']) ? $_POST['signature'] : null;
+
+        //log callback untuk debug
+        // file_put_contents('callback.txt', "* Callback *\r\n", FILE_APPEND | LOCK_EX);
+
+        if (!empty($merchantCode) && !empty($amount) && !empty($merchantOrderId) && !empty($signature)) {
+            $params = $merchantCode . $amount . $merchantOrderId . $apiKey;
+            $calcSignature = md5($params);
+
+            if ($signature == $calcSignature) {
+                //Callback tervalidasi
+                //Silahkan rubah status transaksi anda disini
+                // file_put_contents('callback.txt', "* Success *\r\n\r\n", FILE_APPEND | LOCK_EX);
+                $payment = Payment::where('reference', $reference)->first();
+                $payment->is_paid = true;
+                $payment->save();
+            } else {
+                // file_put_contents('callback.txt', "* Bad Signature *\r\n\r\n", FILE_APPEND | LOCK_EX);
+                throw new Exception('Bad Signature');
+            }
+        } else {
+            // file_put_contents('callback.txt', "* Bad Parameter *\r\n\r\n", FILE_APPEND | LOCK_EX);
+            throw new Exception('Bad Parameter');
+        }
     }
 
 

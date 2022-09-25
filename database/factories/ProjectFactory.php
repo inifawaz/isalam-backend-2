@@ -77,7 +77,7 @@ class ProjectFactory extends Factory
             "start_date" => $start_date,
             "end_date" => $end_date,
             "is_shown" => fake()->randomElement([true, true, true, true, true, true, true, true, true,  false]),
-            "is_ended" => fake()->randomElement([true, true, true, true, true, true, true, true, true,  false]),
+            "is_ended" => false,
         ];
     }
 }

@@ -22,4 +22,9 @@ class Payment extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function scopeSuccess($query)
+    {
+        return $query->where('is_paid', true);
+    }
 }

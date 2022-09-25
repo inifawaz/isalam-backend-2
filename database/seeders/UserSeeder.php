@@ -38,7 +38,6 @@ class UserSeeder extends Seeder
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             'avatar_url' => 'https://placekitten.com/300/300'
         ]);
-        $user1->assignRole('user');
         $user2 = User::create([
             'full_name' => 'User Dua',
             'phone_number' => '082133768997',
@@ -46,6 +45,5 @@ class UserSeeder extends Seeder
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             'avatar_url' => 'https://placekitten.com/300/300'
         ]);
-        $user2->assignRole('user');
     }
 }

@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AdminArticleController;
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminInformationController;
 use App\Http\Controllers\AdminProjectController;
 use App\Http\Controllers\AdminReportController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AuthController;
@@ -51,22 +53,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Me
     Route::get('/me', [AuthController::class, 'me']);
+    Route::put('/me', [AuthController::class, 'update']);
     Route::get('/me/dashboard', [MeController::class, 'getMyDashboardData']);
     Route::get('/me/payments/{id}', [MeController::class, 'getMyPaymentDetails']);
 });
 
 Route::group(['middleware' => ['auth:sanctum', "role:admin"]], function () {
-    // Route::get('/admin/projects', [AdminProjectController::class, 'index']);
 
-    // Route::get('/admin/informations', [AdminInformationController::class, 'index']);
-    // Route::post('/admin/informations', [AdminInformationController::class, 'store']);
-    // Route::put('/admin/informations', [AdminInformationController::class, 'update']);
-    // Route::delete('/admin/informations/{information}', [AdminInformationController::class, 'destroy']);
-
-    // Route::get('/admin/reports', [AdminReportController::class, 'index']);
-    // Route::post('/admin/reports', [AdminReportController::class, 'store']);
-    // Route::put('/admin/reports', [AdminReportController::class, 'update']);
-    // Route::delete('/admin/reports/{report}', [AdminReportController::class, 'destroy']);
 
     // Project
     Route::get('/admin/projects', [AdminProjectController::class, 'index']);
@@ -94,7 +87,15 @@ Route::group(['middleware' => ['auth:sanctum', "role:admin"]], function () {
     Route::delete('/admin/articles/{article}', [AdminArticleController::class, 'destroy']);
     Route::post('/admin/articles', [AdminArticleController::class, 'store']);
 
-    // Article as a Public
+    // User
+    Route::get('/admin/users', [AdminUserController::class, 'index']);
+
+    // User
+    Route::post('/admin', [AuthController::class, 'registerAdmin']);
+    Route::delete('/admin/users/{user}', [AuthController::class, 'destroyUser']);
+
+    // Dashboad Admin Data
+    Route::get('/admin/dashboard', AdminDashboardController::class);
 
     // Topic
     Route::get('/admin/topics', [TopicController::class, 'index']);

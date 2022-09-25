@@ -27,6 +27,7 @@ class PaymentItemResource extends JsonResource
             "payment_image_url" => $this->payment_image_url,
             "va_number" => $this->va_number,
             "expiry_period" => $this->expiry_period,
+            "is_paid" => $this->is_paid,
             "status" => OnaizaDuitku::checkPaymentStatus($this->merchant_order_id)
         ];
     }

@@ -16,17 +16,17 @@ class UserResource extends JsonResource
     {
         return [
             'user_id' => $this->id,
-            'role' => $this->getRoleNames()[0],
+            'role' => $this->getRoleNames(),
             'full_name' => $this->full_name,
             'phone_number' => $this->phone_number,
             'email' => $this->email,
-            'province' => $this->province,
-            'city' => $this->city,
-            'district' => $this->district,
-            'village' => $this->village,
-            'zip_code' => $this->zip_code,
-            'address' => $this->address,
-            'avatar_url' => $this->avatar_url,
+            'province' => $this->province ?? '',
+            'city' => $this->city ?? '',
+            'district' => $this->district ?? '',
+            'village' => $this->village ?? '',
+            'zip_code' => $this->zip_code ?? '',
+            'address' => $this->address ?? '',
+            'avatar_url' => $this->avatar_url ?? '',
         ];
     }
 }

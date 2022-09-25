@@ -39,6 +39,7 @@ class AdminProjectDetailResource extends JsonResource
             "end_date" => $this->end_date,
             "is_shown" => $this->is_shown,
             "is_ended" => $this->is_ended,
+            "is_favourite" => $this->is_favourite,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at
         ];

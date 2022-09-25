@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\MyProjectItemResource;
 use App\Http\Resources\PaymentDetailsResource;
 use App\Http\Resources\PaymentItemResource;
+use App\Http\Resources\UserResource;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,16 +16,18 @@ class MeController extends Controller
     public function getMyDashboardData()
     {
         $user = Auth::user();
-        $payments = Payment::where('user_id', $user->id)->orderBy('id', 'desc')->get();
-        $projects = Payment::where('user_id', $user->id)->select('project_id')->distinct()->get();
+        $payments = $user->payments;
+        $projects = Payment::where('user_id', $user->id)->where('is_paid', true)->select('project_id')->distinct()->get();
         return response([
             "statistics" => [
-                "total_given_amount" => $payments->sum('given_amount'),
+                "total_given_amount" => $payments->where('is_paid', true)->sum('given_amount'),
                 "total_projects" => $projects->count(),
-                "total_transactions" => $payments->count()
+                "total_transactions" => $payments->where('is_paid', true)->count()
             ],
             'payments' => PaymentItemResource::collection($payments),
-            'projects' => MyProjectItemResource::collection($projects)
+
+            'projects' => MyProjectItemResource::collection($projects),
+            "profile" => new UserResource($user)
         ]);
     }
 

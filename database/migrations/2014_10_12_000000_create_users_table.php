@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('full_name');
             $table->string('phone_number');
             $table->string('email')->unique();
+            $table->boolean('is_active')->default(true);
 
             $table->string('province')->nullable();
             $table->string('city')->nullable();

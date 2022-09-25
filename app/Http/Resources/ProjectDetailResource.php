@@ -14,7 +14,7 @@ class ProjectDetailResource extends JsonResource
      */
     public function toArray($request)
     {
-        $collected_amount = $this->transactions->sum('given_amount') ?? 0;
+        $collected_amount = $this->paymentsSuccess->sum('given_amount') ?? 0;
 
         $first_choice_given_amount = $this->first_choice_given_amount;
         $second_choice_given_amount = $this->second_choice_given_amount;
@@ -41,7 +41,8 @@ class ProjectDetailResource extends JsonResource
             "maintenance_fee" => $this->maintenance_fee,
             "is_ended" => $this->is_ended,
             "choice_given_amount" => $choice_given_amount,
-            "collected_amount" => $collected_amount
+            "collected_amount" => $collected_amount,
+            "is_favourite" => $this->is_favourite
         ];
         if ($this->is_target) {
             $return['target_amount'] = $this->target_amount;
