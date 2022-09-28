@@ -37,7 +37,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = new Category();
+        $category->name = $request->name;
+        $category->save();
+
+        return response([
+            'message' => 'berhasil menambah kategori baru'
+        ]);
     }
 
     /**
@@ -48,7 +54,6 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
     }
 
     /**
@@ -71,7 +76,12 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $category->name = $request->name;
+        $category->save();
+
+        return response([
+            'message' => 'berhasil merubah kategori'
+        ]);
     }
 
     /**
@@ -82,6 +92,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return response([
+            'message' => 'berhasil menghapus kategori' . ' ' . $category->name
+        ]);
     }
 }

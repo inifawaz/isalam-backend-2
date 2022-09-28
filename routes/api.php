@@ -68,8 +68,17 @@ Route::group(['middleware' => ['auth:sanctum', "role:admin"]], function () {
     Route::post('/assets/img/projects/content', [AssetController::class, 'uploadImageProjectContent']);
     Route::put('/admin/projects/{project}', [ProjectController::class, 'update']);
 
-    // Categories
+    // Category
     Route::get('/admin/categories', [CategoryController::class, 'index']);
+    Route::post('/admin/categories', [CategoryController::class, 'store']);
+    Route::put('/admin/categories/{category}', [CategoryController::class, 'update']);
+    Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy']);
+
+    // Topic
+    Route::get('/admin/topics', [TopicController::class, 'index']);
+    Route::post('/admin/topics', [TopicController::class, 'store']);
+    Route::put('/admin/topics/{topic}', [TopicController::class, 'update']);
+    Route::delete('/admin/topics/{topic}', [TopicController::class, 'destroy']);
 
     // Information
     Route::put('/admin/information/{information}', [InformationController::class, 'update']);

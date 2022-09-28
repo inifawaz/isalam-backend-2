@@ -18,7 +18,7 @@ class ProjectItemResource extends JsonResource
         $return = [
             "id" => $this->id,
             "featured_image_url" => $this->featured_image_url,
-            "category" => $this->category->name,
+            "category" => $this->category->name ?? '',
             "location" => $this->location,
             "name" => $this->name,
             "collected_amount" => $collected_amount,

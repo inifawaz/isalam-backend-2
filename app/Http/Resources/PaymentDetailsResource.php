@@ -23,6 +23,7 @@ class PaymentDetailsResource extends JsonResource
             "given_amount" => $this->given_amount,
             "maintenance_fee" => $this->maintenance_fee,
             "payment_name" => $this->payment_name,
+            "payment_method" => $this->payment_method,
             "payment_fee" => $this->payment_fee,
             "payment_image_url" => $this->payment_image_url,
             "va_number" => $this->va_number,

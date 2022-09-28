@@ -37,7 +37,13 @@ class TopicController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $topic = new Topic();
+        $topic->name = $request->name;
+        $topic->save();
+
+        return response([
+            'message' => 'berhasil menambah topic baru'
+        ]);
     }
 
     /**
@@ -71,7 +77,12 @@ class TopicController extends Controller
      */
     public function update(Request $request, Topic $topic)
     {
-        //
+        $topic->name = $request->name;
+        $topic->save();
+
+        return response([
+            'message' => 'berhasil merubah topic'
+        ]);
     }
 
     /**
@@ -82,6 +93,9 @@ class TopicController extends Controller
      */
     public function destroy(Topic $topic)
     {
-        //
+        $topic->delete();
+        return response([
+            'message' => 'berhasil menghapus topic' . ' ' . $topic->name
+        ]);
     }
 }

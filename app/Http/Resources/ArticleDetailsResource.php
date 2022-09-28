@@ -16,7 +16,7 @@ class ArticleDetailsResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            'topic' => $this->topic->name,
+            'topic' => $this->topic->name ?? '',
             "featured_image_url" => $this->featured_image_url,
             "content" => $this->content,
             'created_at' => $this->created_at->format('d F Y'),

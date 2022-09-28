@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->restrictOnDelete();
-            $table->foreignId('topic_id')->constrained()->restrictOnDelete();
+            $table->foreignId('topic_id')->nullable()->constrained()->nullOnDelete();
             $table->text('featured_image_url');
             $table->text('content');
             $table->boolean('is_shown')->default(true);
