@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TopicStoreRequest;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 
@@ -35,7 +36,7 @@ class TopicController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TopicStoreRequest $request)
     {
         $topic = new Topic();
         $topic->name = $request->name;
@@ -75,7 +76,7 @@ class TopicController extends Controller
      * @param  \App\Models\Topic  $topic
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Topic $topic)
+    public function update(TopicStoreRequest $request, Topic $topic)
     {
         $topic->name = $request->name;
         $topic->save();

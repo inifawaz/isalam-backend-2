@@ -32,9 +32,15 @@ class PaymentItemResource extends JsonResource
 
         ];
 
+
+
         $status_code = $this->status_code;
         if ($status_code == null) {
             $return['status'] = OnaizaDuitku::checkPaymentStatus($this->merchant_order_id);
+        }
+
+        if ($status_code == '00') {
+            $return['paid_at'] = $this->paid_at->format('d F Y H:i');
         }
 
         return $return;

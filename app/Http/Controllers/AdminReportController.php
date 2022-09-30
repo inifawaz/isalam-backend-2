@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReportStoreRequest;
+use App\Http\Requests\ReportUpdateRequest;
 use App\Http\Resources\AdminReportItemResource;
 use App\Models\Report;
 use Illuminate\Http\Request;
@@ -16,9 +18,9 @@ class AdminReportController extends Controller
             "message" => "laporan berhasil dihapus"
         ]);
     }
-    public function update(Request $request)
+    public function update(ReportUpdateRequest $request, Report $report)
     {
-        $report = Report::findOrFail($request->id);
+        // $report = Report::findOrFail($request->id);
         $report->update([
             "content" => $request->content,
             "user_id" => Auth::user()->id
@@ -35,7 +37,7 @@ class AdminReportController extends Controller
             "reports" => AdminReportItemResource::collection(Report::orderBy('id', 'desc')->get())
         ]);
     }
-    public function store(Request $request)
+    public function store(ReportStoreRequest $request)
     {
         $report = Report::create([
             "user_id" => Auth::user()->id,

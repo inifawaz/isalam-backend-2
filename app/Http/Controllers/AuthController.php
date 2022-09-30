@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AuthLoginRequest;
+use App\Http\Requests\AuthRegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,7 +14,7 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function login(AuthLoginRequest $request)
     {
         if (!Auth::attempt($request->only(['email', 'password']))) {
             return response([
@@ -35,7 +37,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function me(Request $request)
+    public function me()
     {
         return response([
             'user' => new UserResource(Auth::user())
@@ -70,7 +72,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(Request $request)
+    public function register(AuthRegisterRequest $request)
     {
         $user = User::create([
             'full_name' => $request->full_name,
@@ -84,7 +86,7 @@ class AuthController extends Controller
             'token' => $user->createToken('token')->plainTextToken
         ], 201);
     }
-    public function registerAdmin(Request $request)
+    public function registerAdmin(AuthRegisterRequest $request)
     {
         $user = User::create([
             'full_name' => $request->full_name,

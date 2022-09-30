@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProjectStoreRequest;
 use App\Http\Resources\AdminInformationItemResource;
 use App\Http\Resources\BackerItemResource;
 use App\Http\Resources\ProjectDetailResource;
@@ -55,7 +56,7 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProjectStoreRequest $request)
     {
         $project = new Project();
         $project->user_id = Auth::user()->id;
@@ -126,7 +127,7 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(ProjectStoreRequest $request, Project $project)
     {
 
 

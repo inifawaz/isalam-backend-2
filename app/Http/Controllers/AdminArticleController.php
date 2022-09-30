@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminArticlePostRequest;
+use App\Http\Requests\AdminArticleUpdateRequest;
 use App\Http\Resources\ArticleItemResource;
 use App\Models\Article;
 use Illuminate\Http\Request;
@@ -18,7 +20,7 @@ class AdminArticleController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(AdminArticlePostRequest $request)
     {
         $article = new Article();
         if ($request->file('featured_image_url')) {
@@ -55,7 +57,7 @@ class AdminArticleController extends Controller
         ]);
     }
 
-    public function update(Article $article, Request $request)
+    public function update(Article $article, AdminArticleUpdateRequest $request)
     {
 
         $article->user_id = Auth::user()->id;

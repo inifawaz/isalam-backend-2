@@ -19,7 +19,6 @@ class AdminInformationController extends Controller
     }
     public function update(Request $request)
     {
-        dd('test');
         $information = Information::findOrFail($request->id);
         $information->update([
             "content" => $request->content,

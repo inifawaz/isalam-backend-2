@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InformationStoreRequest;
+use App\Http\Requests\InformationUpdateRequest;
 use App\Models\Information;
 use App\Models\Project;
 use Illuminate\Http\Client\ResponseSequence;
@@ -36,7 +38,7 @@ class InformationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(InformationStoreRequest $request)
     {
         $information = new Information();
         $information->project_id = $request->project_id;
@@ -79,7 +81,7 @@ class InformationController extends Controller
      * @param  \App\Models\Information  $information
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Information $information)
+    public function update(InformationUpdateRequest $request, Information $information)
     {
 
         $information->content = $request->content;

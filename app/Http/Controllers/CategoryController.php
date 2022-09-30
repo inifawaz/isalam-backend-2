@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryStoreRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -35,7 +36,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryStoreRequest $request)
     {
         $category = new Category();
         $category->name = $request->name;
@@ -74,7 +75,7 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryStoreRequest $request, Category $category)
     {
         $category->name = $request->name;
         $category->save();

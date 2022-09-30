@@ -16,7 +16,7 @@ class BackerItemResource extends JsonResource
     public function toArray($request)
     {
         return [
-            "avatar_url" => $this->user->avatar_url,
+            "avatar_url" => $this->is_anonim === 1 ? null :  $this->user->avatar_url,
             "name" => $this->is_anonim === 1 ? 'Hamba Allah' : $this->on_behalf,
             "given_amount" => $this->given_amount,
             "paid_at" => Carbon::parse($this->created_at)->diffForHumans()

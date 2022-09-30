@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\OnaizaDuitku;
+use App\Http\Requests\PaymentGetPaymentMethodsRequest;
+use App\Http\Requests\PaymentStoreRequest;
 use App\Http\Resources\PaymentDetailsResource;
 use App\Http\Resources\PaymentItemResource;
 use App\Models\Callback;
@@ -30,7 +32,7 @@ class PaymentController extends Controller
         $this->return_url = config('app.duitku_return_url');
         $this->expiry_period = 60 * 24;
     }
-    public function getPaymentMethods(Request $request)
+    public function getPaymentMethods(PaymentGetPaymentMethodsRequest $request)
     {
         $project = Project::findOrFail($request->project_id);
         $paymentMethods = OnaizaDuitku::getPaymentMethods($request->amount, $request->project_id);
@@ -133,7 +135,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(PaymentStoreRequest $request)
     {
 
         $project = Project::find($request->project_id);
@@ -222,7 +224,7 @@ class PaymentController extends Controller
 
         $returnUrl = $this->return_url;
         $callbackUrl = $this->callback_url;
-        $signatureA = md5($this->merchant_code . $merchantOrderId . $paymentAmount . $this->api_key);
+        $signatureA = md5($this->merchant_code . $merchantOrderId . $paymentAmount   . $this->api_key);
         $expiryPeriod = $this->expiry_period;
 
         $params = array(
@@ -270,7 +272,7 @@ class PaymentController extends Controller
                     "va_number" => $result['vaNumber'] ?? null,
                     "qr_string" => $result['qrString'] ?? null,
                     "expiry_period" => $this->expiry_period,
-                    "signature" => $signature,
+                    "signature" => md5($this->merchant_code . $paymentAmount  . $merchantOrderId   . $this->api_key),
                     'callback_url' => $callbackUrl,
                     'return_url' => $returnUrl,
                     'product_details' => $productDetails

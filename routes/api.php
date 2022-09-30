@@ -91,6 +91,7 @@ Route::group(['middleware' => ['auth:sanctum', "role:admin"]], function () {
     // Report
     Route::post('/admin/reports', [AdminReportController::class, 'store']);
     Route::delete('/admin/reports/{report}', [AdminReportController::class, 'destroy']);
+    Route::put('/admin/reports/{report}', [AdminReportController::class, 'update']);
 
     // Article
     Route::get('/admin/articles', [AdminArticleController::class, 'index']);

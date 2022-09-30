@@ -42,7 +42,8 @@ class ProjectDetailResource extends JsonResource
             "is_ended" => $this->is_ended,
             "choice_given_amount" => $choice_given_amount,
             "collected_amount" => $collected_amount,
-            "is_favourite" => $this->is_favourite
+            "is_favourite" => $this->is_favourite,
+            'total_backers' => $this->paymentsSuccess->count() ?? 0
         ];
         if ($this->is_target) {
             $return['target_amount'] = $this->target_amount;
