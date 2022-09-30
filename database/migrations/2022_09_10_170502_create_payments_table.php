@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->restrictOnDelete();
             $table->foreignId('project_id')->constrained()->restrictOnDelete();
+            $table->string('on_behalf');
+            $table->boolean('is_anonim');
 
             $table->bigInteger('given_amount');
             $table->bigInteger('maintenance_fee');
@@ -34,6 +36,12 @@ return new class extends Migration
             $table->string('qr_string')->nullable();
             $table->string('expiry_period');
 
+            $table->string('callback_url');
+            $table->string('return_url');
+            $table->string('signature');
+            $table->string('product_details');
+
+            $table->string('status_code')->nullable();
             $table->boolean('is_paid')->default(false);
             $table->timestamp('paid_at')->nullable();
 

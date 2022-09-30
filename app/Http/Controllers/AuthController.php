@@ -78,9 +78,9 @@ class AuthController extends Controller
             "email" => $request->email,
             "password" => Hash::make($request->password)
         ]);
-        $user->assignRole('user');
         return response([
-            'user' =>  $user,
+            'user' =>  new UserResource($user),
+            'message' => 'berhasil membuat akun anda',
             'token' => $user->createToken('token')->plainTextToken
         ], 201);
     }
@@ -94,7 +94,7 @@ class AuthController extends Controller
         ]);
         $user->assignRole('admin');
         return response([
-            'user' =>  $user,
+            'user' =>  new UserResource($user),
             "message" => 'berhasil menambah admin baru'
         ], 201);
     }

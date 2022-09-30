@@ -33,7 +33,7 @@ class Project extends Model
 
     public function paymentsSuccess()
     {
-        return $this->hasMany(Payment::class)->where('is_paid', true)->orderBy('id', 'desc');
+        return $this->hasMany(Payment::class)->where('status_code', '00')->orderBy('id', 'desc');
     }
     public function payments()
     {

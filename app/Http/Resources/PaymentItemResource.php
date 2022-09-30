@@ -16,7 +16,7 @@ class PaymentItemResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $return =  [
             "id" => $this->id,
             "merchant_order_id" => $this->merchant_order_id,
             "created_at" => $this->created_at->format('d F Y H:i'),
@@ -28,7 +28,15 @@ class PaymentItemResource extends JsonResource
             "va_number" => $this->va_number,
             "expiry_period" => $this->expiry_period,
             "is_paid" => $this->is_paid,
-            "status" => OnaizaDuitku::checkPaymentStatus($this->merchant_order_id)
+            'status_code' => $this->status_code
+
         ];
+
+        $status_code = $this->status_code;
+        if ($status_code == null) {
+            $return['status'] = OnaizaDuitku::checkPaymentStatus($this->merchant_order_id);
+        }
+
+        return $return;
     }
 }

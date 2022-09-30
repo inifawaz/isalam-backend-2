@@ -19,8 +19,8 @@ class Duitku
     {
         $this->api_key = config('app.duitku_api_key');
         $this->merchant_code = config('app.duitku_merchant_code');
-        $this->callback_url = config('app.url') . 'callback';
-        $this->return_url = config('app.url') . 'return';
+        $this->callback_url = config('app.duitku_callback_url');
+        $this->return_url = config('app.duitku_return_url');
         $this->expiry_period = 60 * 24;
     }
 

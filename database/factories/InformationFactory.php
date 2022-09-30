@@ -21,7 +21,7 @@ class InformationFactory extends Factory
         return [
             "user_id" => fake()->randomElement(User::role('admin')->get()->pluck('id')),
             "project_id" => fake()->randomElement(Project::shown()->get()->pluck('id')),
-            "content" => "<h2>" . fake()->sentence(7) . "</h2>" . "<p>" . fake()->sentence(100) . "</p>"
+            "content" => "<h2>" . fake()->sentence(7) . "</h2>" . "<p>" . fake()->sentence(200) . "</p>"
         ];
     }
 }

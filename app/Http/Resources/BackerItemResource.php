@@ -17,7 +17,7 @@ class BackerItemResource extends JsonResource
     {
         return [
             "avatar_url" => $this->user->avatar_url,
-            "name" => $this->user->full_name,
+            "name" => $this->is_anonim === 1 ? 'Hamba Allah' : $this->on_behalf,
             "given_amount" => $this->given_amount,
             "paid_at" => Carbon::parse($this->created_at)->diffForHumans()
         ];

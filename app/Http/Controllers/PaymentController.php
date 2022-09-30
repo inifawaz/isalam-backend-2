@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\OnaizaDuitku;
 use App\Http\Resources\PaymentDetailsResource;
 use App\Http\Resources\PaymentItemResource;
+use App\Models\Callback;
 use App\Models\Payment;
 use App\Models\Project;
 use Carbon\Carbon;
@@ -39,34 +40,80 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function callback()
+    public function getMyPayments()
+    {
+        $user = Auth::user();
+        $payments = $user->payments;
+        return response([
+            'payments' => PaymentItemResource::collection($payments)
+        ]);
+    }
+
+    public function callback(Request $request)
     {
         $apiKey = $this->api_key; // API key anda
-        $merchantCode = isset($_POST['merchantCode']) ? $_POST['merchantCode'] : null;
-        $amount = isset($_POST['amount']) ? $_POST['amount'] : null;
-        $merchantOrderId = isset($_POST['merchantOrderId']) ? $_POST['merchantOrderId'] : null;
-        $productDetail = isset($_POST['productDetail']) ? $_POST['productDetail'] : null;
-        $additionalParam = isset($_POST['additionalParam']) ? $_POST['additionalParam'] : null;
-        $paymentMethod = isset($_POST['paymentCode']) ? $_POST['paymentCode'] : null;
-        $resultCode = isset($_POST['resultCode']) ? $_POST['resultCode'] : null;
-        $merchantUserId = isset($_POST['merchantUserId']) ? $_POST['merchantUserId'] : null;
-        $reference = isset($_POST['reference']) ? $_POST['reference'] : null;
-        $signature = isset($_POST['signature']) ? $_POST['signature'] : null;
-
+        $merchantCode = $request->merchantCode;
+        $amount = $request->amount;
+        $merchantOrderId = $request->merchantOrderId;
+        $productDetail = $request->productDetail;
+        $additionalParam = $request->additionalParam;
+        $paymentMethod = $request->paymentCode;
+        $resultCode = $request->resultCode;
+        $merchantUserId = $request->merchantUserId;
+        $reference = $request->reference;
+        $signature = $request->signature;
+        $spUserHash = $request->spUserHash;
         //log callback untuk debug
         // file_put_contents('callback.txt', "* Callback *\r\n", FILE_APPEND | LOCK_EX);
 
         if (!empty($merchantCode) && !empty($amount) && !empty($merchantOrderId) && !empty($signature)) {
             $params = $merchantCode . $amount . $merchantOrderId . $apiKey;
             $calcSignature = md5($params);
+            // dd($calcSignature);
+
 
             if ($signature == $calcSignature) {
                 //Callback tervalidasi
                 //Silahkan rubah status transaksi anda disini
                 // file_put_contents('callback.txt', "* Success *\r\n\r\n", FILE_APPEND | LOCK_EX);
-                $payment = Payment::where('reference', $reference)->first();
-                $payment->is_paid = true;
-                $payment->save();
+                $callback = new Callback();
+                $callback->merchant_code = $merchantCode;
+                $callback->amount = $amount;
+                $callback->merchant_order_id = $merchantOrderId;
+                $callback->product_detail = $productDetail;
+                $callback->additional_param = $additionalParam;
+                $callback->payment_method = $paymentMethod;
+                $callback->result_code = $resultCode;
+                $callback->merchant_user_id = $merchantUserId;
+                $callback->reference = $reference;
+                $callback->signature = $signature;
+                $callback->sp_user_hash = $spUserHash;
+                $callback->save();
+
+                if ($resultCode == 00) {
+                    $payment = Payment::where('reference', $reference)->first();
+                    $payment->is_paid = true;
+                    $payment->paid_at = now()->format('Y-m-d H:i:s');
+                    $payment->status_code = $resultCode;
+                    $payment->save();
+
+                    return response([
+                        'message' => 'berhasil',
+                        'payment' => $payment
+                    ]);
+                }
+                if ($resultCode == 01) {
+                    $payment = Payment::where('reference', $reference)->first();
+
+                    $payment->status_code = $resultCode;
+
+                    $payment->save();
+
+                    return response([
+                        'message' => 'gagal',
+                        'payment' => $payment
+                    ]);
+                }
             } else {
                 // file_put_contents('callback.txt', "* Bad Signature *\r\n\r\n", FILE_APPEND | LOCK_EX);
                 throw new Exception('Bad Signature');
@@ -88,19 +135,25 @@ class PaymentController extends Controller
 
     public function store(Request $request)
     {
+
         $project = Project::find($request->project_id);
-
-        $payments = Payment::where('project_id', '=', $request->project_id)->get();
-        $amount_collected = $payments->sum('project_amount_given') ?? 0;
-
-        if (($amount_collected + $request->project_amount_given) > $project->target_amount) {
-            $selisih = $project->target_amount - $amount_collected;
+        if ($project == null) {
             return response([
-                'status' => 'error',
-                'message' => 'nominal wakaf yang anda berikan tidak boleh melebihi sisa target nominal wakaf yang telah ditentukan'
-
-            ], 500);
+                'message' => 'program wakaf tidak ditemukan'
+            ], 404);
         }
+
+        // $payments = Payment::where('project_id', '=', $request->project_id)->get();
+        // $amount_collected = $payments->sum('project_amount_given') ?? 0;
+
+        // if (($amount_collected + $request->project_amount_given) > $project->target_amount) {
+        //     $selisih = $project->target_amount - $amount_collected;
+        //     return response([
+        //         'status' => 'error',
+        //         'message' => 'nominal wakaf yang anda berikan tidak boleh melebihi sisa target nominal wakaf yang telah ditentukan'
+
+        //     ], 500);
+        // }
         //
         $datetime = date('Y-m-d H:i:s');
         $signature = hash('sha256', $this->merchant_code . $request->given_amount . $datetime . $this->api_key);
@@ -135,14 +188,14 @@ class PaymentController extends Controller
 
 
         // Generate Merchant Oder Id
-        $now = Carbon::now('Asia/Jakarta');
-        $project_id_code = str_pad($project->id, 3, "8", STR_PAD_LEFT);
-        $year_code = $now->format('y');
-        $month_code = $now->format('m');
-        $day_code = $now->format('d');
-        $hour_code = $now->format('h');
-        $minute_code = $now->format('i');
-        $second_code = $now->format('s');
+        // $now = Carbon::now('Asia/Jakarta');
+        // $project_id_code = str_pad($project->id, 3, "8", STR_PAD_LEFT);
+        // $year_code = $now->format('y');
+        // $month_code = $now->format('m');
+        // $day_code = $now->format('d');
+        // $hour_code = $now->format('h');
+        // $minute_code = $now->format('i');
+        // $second_code = $now->format('s');
         //
         $merchantOrderId = OnaizaDuitku::generateOrderId($request->project_id);
 
@@ -167,10 +220,9 @@ class PaymentController extends Controller
         ];
         $paymentAmount = $request->given_amount + $project->maintenance_fee;
 
-
         $returnUrl = $this->return_url;
         $callbackUrl = $this->callback_url;
-        $signature = md5($this->merchant_code . $merchantOrderId . $paymentAmount . $this->api_key);
+        $signatureA = md5($this->merchant_code . $merchantOrderId . $paymentAmount . $this->api_key);
         $expiryPeriod = $this->expiry_period;
 
         $params = array(
@@ -186,7 +238,7 @@ class PaymentController extends Controller
             'itemDetails' => $itemDetails,
             'callbackUrl' => $callbackUrl,
             'returnUrl' => $returnUrl,
-            'signature' => $signature,
+            'signature' => $signatureA,
             'expiryPeriod' => $expiryPeriod
         );
         $url = 'https://sandbox.duitku.com/webapi/api/merchant/v2/inquiry';
@@ -202,6 +254,8 @@ class PaymentController extends Controller
                 [
                     "user_id" => Auth::user()->id,
                     "project_id" => $project->id,
+                    "on_behalf" => $request->on_behalf,
+                    'is_anonim' => $request->is_anonim,
                     "given_amount" => $request->given_amount,
                     "maintenance_fee" => $project->maintenance_fee,
                     "payment_fee" => $paymentMethodSelected['totalFee'],
@@ -215,7 +269,12 @@ class PaymentController extends Controller
                     "payment_url" => $result['paymentUrl'],
                     "va_number" => $result['vaNumber'] ?? null,
                     "qr_string" => $result['qrString'] ?? null,
-                    "expiry_period" => $this->expiry_period
+                    "expiry_period" => $this->expiry_period,
+                    "signature" => $signature,
+                    'callback_url' => $callbackUrl,
+                    'return_url' => $returnUrl,
+                    'product_details' => $productDetails
+
                 ]
             );
 
@@ -228,7 +287,8 @@ class PaymentController extends Controller
             // return "Server Error: " . $result->Message;
             return response([
                 'status' => 'errors',
-                'message' => $result->Message
+                'message_from_server' => $result->Message,
+                "message" => 'tidak dapat membuat pembayaran'
             ], 500);
         }
         // return $result;

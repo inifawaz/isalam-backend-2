@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Payment extends Model
 {
     use HasFactory;
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'status_code'];
 
     protected $dates = ['paid_at'];
 
@@ -25,6 +25,6 @@ class Payment extends Model
 
     public function scopeSuccess($query)
     {
-        return $query->where('is_paid', true);
+        return $query->where('status_code', '00');
     }
 }

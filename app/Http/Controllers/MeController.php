@@ -17,12 +17,12 @@ class MeController extends Controller
     {
         $user = Auth::user();
         $payments = $user->payments;
-        $projects = Payment::where('user_id', $user->id)->where('is_paid', true)->select('project_id')->distinct()->get();
+        $projects = Payment::where('user_id', $user->id)->where('status_code', '00')->select('project_id')->distinct()->get();
         return response([
             "statistics" => [
-                "total_given_amount" => $payments->where('is_paid', true)->sum('given_amount'),
+                "total_given_amount" => $payments->where('status_code', '00')->sum('given_amount'),
                 "total_projects" => $projects->count(),
-                "total_transactions" => $payments->where('is_paid', true)->count()
+                "total_transactions" => $payments->where('status_code', '00')->count()
             ],
             'payments' => PaymentItemResource::collection($payments),
 
@@ -30,6 +30,7 @@ class MeController extends Controller
             "profile" => new UserResource($user)
         ]);
     }
+
 
     public function getMyPaymentDetails($id)
     {

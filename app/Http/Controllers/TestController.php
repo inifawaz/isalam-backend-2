@@ -19,7 +19,7 @@ class TestController extends Controller
      */
     public function __invoke(Request $request)
     {
-
+        // dd(0 == true);
         return response([
             'result' => 0 / 10000 * 100
         ]);

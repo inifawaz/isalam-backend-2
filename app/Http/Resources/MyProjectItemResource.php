@@ -17,7 +17,7 @@ class MyProjectItemResource extends JsonResource
      */
     public function toArray($request)
     {
-        $total_given_amount = Payment::where('user_id', Auth::user()->id)->where('project_id', $this->project->id)->where('is_paid', true)->sum('given_amount');
+        $total_given_amount = Payment::where('user_id', Auth::user()->id)->where('project_id', $this->project->id)->where('status_code', '00')->sum('given_amount');
 
         return [
             'id' => $this->project->id,

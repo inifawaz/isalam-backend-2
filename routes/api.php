@@ -42,6 +42,9 @@ Route::get('/articles', [ArticleController::class, 'index']);
 Route::get('/articles/{article}', [ArticleController::class, 'show']);
 Route::get('/topics', [TopicController::class, 'index']);
 
+// Callback
+Route::post('/paymentcallback', [PaymentController::class, 'callback']);
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/logout', [AuthController::class, 'logout']);
