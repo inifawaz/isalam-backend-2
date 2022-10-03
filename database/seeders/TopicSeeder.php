@@ -16,13 +16,13 @@ class TopicSeeder extends Seeder
     public function run()
     {
         Topic::create([
-            'name' => 'Tutorial'
+            'name' => 'Pendidikan'
         ]);
         Topic::create([
-            'name' => 'Pengumuman'
+            'name' => 'Sosial'
         ]);
         Topic::create([
-            'name' => 'Fiqih Muamalah'
+            'name' => 'Dakwah'
         ]);
         Topic::create([
             'name' => 'Umum'

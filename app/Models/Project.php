@@ -40,7 +40,12 @@ class Project extends Model
         return $this->hasMany(Payment::class)->orderBy('id', 'desc');
     }
 
-
+    public function scopeFilter($query)
+    {
+        if (request('search')) {
+            return $query->where('id', 'LIKE', '%' . request('search') . '%')->orWhere('name', 'LIKE', '%' . request('search') . '%');
+        }
+    }
 
     public function scopePaid($query)
     {

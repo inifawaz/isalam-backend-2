@@ -16,14 +16,15 @@ class AdminProjectController extends Controller
 {
     public function index(Request $request)
     {
-        // if ($request->type === 'hidden') {
-        //     return response([
-        //         'project' => ProjectItemResource::collection(Project::hidden()->orderBy('id', 'desc')->get())
-        //     ]);
-        // };
+        if ($request->search) {
+            $projects = Project::where('id', 'LIKE', '%' . $request->search . '%')->orWhere('name', 'LIKE', '%' . $request->search . '%')->orderBy('id', 'desc')->get();
+            return response([
+                'projects' => ProjectItemResource::collection($projects)
+            ]);
+        }
 
         return response([
-            "projects" => ProjectItemResource::collection(Project::orderBy('id', 'desc')->get())
+            'projects' => ProjectItemResource::collection(Project::orderBy('id', 'desc')->get())
         ]);
     }
 
