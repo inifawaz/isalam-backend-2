@@ -34,10 +34,13 @@ class ProjectController extends Controller
             ]);
         }
 
-        return response([
-            'projects' => ProjectItemResource::collection(Project::shown()->orderBy('id', 'desc')->get()),
-            "categories" => Category::all()
-        ]);
+        if ($request->has('category')) {
+            // dd(Category::where('name', $request->category)->first());
+            $category = Category::where('name', $request->category)->first();
+            return  ProjectItemResource::collection(Project::where('category_id', $category?->id)->shown()->orderBy('id', 'desc')->paginate(10))->response()->getData();
+        }
+
+        return ProjectItemResource::collection(Project::shown()->orderBy('id', 'desc')->paginate(10))->response()->getData();
     }
 
     /**

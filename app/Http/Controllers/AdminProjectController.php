@@ -6,6 +6,7 @@ use App\Http\Resources\AdminInformationItemResource;
 use App\Http\Resources\AdminPaymentItemResource;
 use App\Http\Resources\AdminPaymentSuccessfulResource;
 use App\Http\Resources\AdminProjectDetailResource;
+use App\Http\Resources\ProjectItemCollection;
 use App\Http\Resources\ProjectItemResource;
 use App\Http\Resources\ReportItemResource;
 use App\Models\Category;
@@ -17,14 +18,16 @@ class AdminProjectController extends Controller
     public function index(Request $request)
     {
         if ($request->search) {
-            $projects = Project::where('id', 'LIKE', '%' . $request->search . '%')->orWhere('name', 'LIKE', '%' . $request->search . '%')->orderBy('id', 'desc')->get();
+            $projects = Project::where('id', $request->search)->orWhere('name', 'LIKE', '%' . $request->search . '%')->orderBy('id', 'desc')->paginate(10);
             return response([
-                'projects' => ProjectItemResource::collection($projects)
+
+                'projects' => ProjectItemResource::collection($projects)->response()->getData()
             ]);
         }
 
         return response([
-            'projects' => ProjectItemResource::collection(Project::orderBy('id', 'desc')->get())
+            // 'projects' => ProjectItemResource::collection(Project::orderBy('id', 'desc')->paginate(10))
+            'projects' => ProjectItemResource::collection(Project::orderBy('id', 'desc')->paginate(10))->response()->getData()
         ]);
     }
 
