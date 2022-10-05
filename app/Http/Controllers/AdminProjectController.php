@@ -25,6 +25,31 @@ class AdminProjectController extends Controller
             ]);
         }
 
+        if ($request->type === 'ended') {
+            $projects = Project::where('is_ended', 1)->orderBy('id', 'desc')->get();
+
+            return response([
+                'message' => 'menampilkan project yang telah selesai',
+                'projects' => ProjectItemResource::collection($projects)
+            ]);
+        }
+        if ($request->type === 'in-progress') {
+            $projects = Project::where('is_ended', 0)->where('is_shown', 1)->orderBy('id', 'desc')->get();
+
+            return response([
+                'message' => 'menampilkan project yang sedang berlangsung',
+                'projects' => ProjectItemResource::collection($projects)
+            ]);
+        }
+        if ($request->type === 'hidden') {
+            $projects = Project::where('is_shown', 0)->orderBy('id', 'desc')->get();
+
+            return response([
+                'message' => 'menampilkan project yang disembunyikan',
+                'projects' => ProjectItemResource::collection($projects)
+            ]);
+        }
+
         return response([
             // 'projects' => ProjectItemResource::collection(Project::orderBy('id', 'desc')->paginate(10))
             'projects' => ProjectItemResource::collection(Project::orderBy('id', 'desc')->paginate(10))->response()->getData()

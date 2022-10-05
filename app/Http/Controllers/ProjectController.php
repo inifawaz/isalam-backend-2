@@ -37,7 +37,10 @@ class ProjectController extends Controller
         if ($request->has('category')) {
             // dd(Category::where('name', $request->category)->first());
             $category = Category::where('name', $request->category)->first();
-            return  ProjectItemResource::collection(Project::where('category_id', $category?->id)->shown()->orderBy('id', 'desc')->paginate(10))->response()->getData();
+            return response([
+                'category' => $request->category,
+                'projects' => ProjectItemResource::collection(Project::where('category_id', $category?->id)->shown()->orderBy('id', 'desc')->get())
+            ]);
         }
 
         return ProjectItemResource::collection(Project::shown()->orderBy('id', 'desc')->paginate(10))->response()->getData();
