@@ -18,10 +18,10 @@ class AdminProjectController extends Controller
     public function index(Request $request)
     {
         if ($request->search) {
-            $projects = Project::where('id', $request->search)->orWhere('name', 'LIKE', '%' . $request->search . '%')->orderBy('id', 'desc')->paginate(10);
+            $projects = Project::where('id', $request->search)->orWhere('name', 'LIKE', '%' . $request->search . '%')->orderBy('id', 'desc')->get();
             return response([
 
-                'projects' => ProjectItemResource::collection($projects)->response()->getData()
+                'projects' => ProjectItemResource::collection($projects)
             ]);
         }
 
