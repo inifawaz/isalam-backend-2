@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminArticleController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminInformationController;
+use App\Http\Controllers\AdminPaymentController;
 use App\Http\Controllers\AdminProjectController;
 use App\Http\Controllers\AdminReportController;
 use App\Http\Controllers\AdminUserController;
@@ -72,6 +73,7 @@ Route::group(['middleware' => ['auth:sanctum', "role:admin"]], function () {
     Route::post('/admin/projects', [ProjectController::class, 'store']);
     Route::post('/assets/img/projects/content', [AssetController::class, 'uploadImageProjectContent']);
     Route::put('/admin/projects/{project}', [ProjectController::class, 'update']);
+    Route::delete('/admin/projects/{project}', [ProjectController::class, 'destroy']);
 
     // Category
     Route::get('/admin/categories', [CategoryController::class, 'index']);
@@ -114,4 +116,6 @@ Route::group(['middleware' => ['auth:sanctum', "role:admin"]], function () {
 
     // Topic
     Route::get('/admin/topics', [TopicController::class, 'index']);
+
+    Route::get('/admin/payments', [AdminPaymentController::class, 'index']);
 });

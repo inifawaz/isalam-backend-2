@@ -18,6 +18,9 @@ class PaymentItemResource extends JsonResource
     {
         $return =  [
             "id" => $this->id,
+            'user_id' => $this->user_id,
+            'user_name' => $this->user->full_name,
+            'user_email' => $this->user->email,
             "merchant_order_id" => $this->merchant_order_id,
             "created_at" => $this->created_at->format('d F Y H:i'),
             "project_id" => $this->project->id,
@@ -28,8 +31,9 @@ class PaymentItemResource extends JsonResource
             "va_number" => $this->va_number,
             "expiry_period" => $this->expiry_period,
             "is_paid" => $this->is_paid,
-            'status_code' => $this->status_code
-
+            'status_code' => $this->status_code,
+            "signature" => $this->signature,
+            'merchant_code' => $this->merchant_code
         ];
 
 

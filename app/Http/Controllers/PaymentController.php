@@ -13,6 +13,7 @@ use App\Models\Project;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon as SupportCarbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -95,7 +96,7 @@ class PaymentController extends Controller
                 if ($resultCode == 00) {
                     $payment = Payment::where('reference', $reference)->first();
                     $payment->is_paid = true;
-                    $payment->paid_at = now()->format('Y-m-d H:i:s');
+                    $payment->paid_at = Carbon::now('Asia/Jakarta'); //now('Asia/Jakarta')->format('Y-m-d H:i:s'); // carbon::now()
                     $payment->status_code = $resultCode;
                     $payment->save();
 

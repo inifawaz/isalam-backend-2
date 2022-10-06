@@ -180,6 +180,9 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+        return response([
+            'message' => 'berhasil menghapus program wakaf'
+        ]);
     }
 }

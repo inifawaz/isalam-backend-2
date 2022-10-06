@@ -41,6 +41,14 @@ class AdminProjectController extends Controller
                 'projects' => ProjectItemResource::collection($projects)
             ]);
         }
+        if ($request->type === 'favourite') {
+            $projects = Project::where('is_favourite', 1)->where('is_shown', 1)->orderBy('id', 'desc')->get();
+
+            return response([
+                'message' => 'menampilkan project favourite',
+                'projects' => ProjectItemResource::collection($projects)
+            ]);
+        }
         if ($request->type === 'hidden') {
             $projects = Project::where('is_shown', 0)->orderBy('id', 'desc')->get();
 
